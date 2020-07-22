@@ -8,11 +8,22 @@ export default class Settings {
       ['difficulty', 'easy'],
     ]);
 
-    if (arguments.length == 0) {
+    // eslint-disable-next-line  prefer-rest-params
+    if (arguments.length === 0 || arguments[0].size === 0) {
       this.userSettings = new Map();
     } else {
-      this.userSettings = settings;
-    }    
+      for (const [name, prop] of settings) {
+        if (properties.has(name)) {
+          if (properties.get(name).includes(prop)) {
+            this.userSettings = settings;
+          } else {
+            this.userSettings = new Map();
+          }
+        } else {
+          this.userSettings = new Map();
+        }
+      }
+    }
   }
 
   get settings() {

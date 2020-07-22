@@ -9,11 +9,23 @@ describe('Начинаем тестирование класса Settings', () =
       expect(set.userSettings).toEqual(settings);
     });
 
-    test('Должны получить пустой объект', () => {
+    test('Должны получить пустой Map если конструктор без аргументом', () => {
       const set = new Settings();
 
       expect(set.userSettings).toEqual(new Map());
     });
+
+    test.each([
+      [new Map([['drop', 'gray']]), new Map()],
+      [new Map([['theme', 'drop']]), new Map()],
+    ])(
+      ('Для настроек %s должны плучить пустой Map'),
+      (property, expected) => {
+        const set = new Settings(property);
+
+        expect(set.userSettings).toEqual(expected);
+      },
+    );
   });
 
   describe('Тестируем геттер setings', () => {
