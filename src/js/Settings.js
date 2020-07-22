@@ -1,33 +1,21 @@
 import { properties } from './properties';
 
 export default class Settings {
-  constructor() {
+  constructor(settings) {
     this.defaultSettings = new Map([
       ['theme', 'dark'],
       ['music', 'trance'],
       ['difficulty', 'easy'],
     ]);
 
-    this.userSettings = new Map();
+    if (arguments.length == 0) {
+      this.userSettings = new Map();
+    } else {
+      this.userSettings = settings;
+    }    
   }
 
-  setSettings(obj) {
-    const { ...settings } = obj;
-
-    for (const [name, prop] of Object.entries(settings)) {
-      if (properties.has(name)) {
-        if (properties.get(name).includes(prop)) {
-          this.userSettings.set(name, prop);
-        } else {
-          throw new Error(`Для настройки ${name} нет варианта ${prop}`);
-        }
-      } else {
-        throw new Error(`Нет такой настройки - ${name}`);
-      }
-    }
-  }
-
-  getSettings() {
+  get settings() {
     if (this.userSettings.size === 0) {
       return this.defaultSettings;
     }
@@ -39,9 +27,5 @@ export default class Settings {
     });
 
     return crossSet;
-  }
-
-  resetSettings() {
-    this.userSettings.clear();
   }
 }
